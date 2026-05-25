@@ -33,10 +33,9 @@ FastBox Delivery System/
 ├── Delivery System.py                         # main script
 ├── base_case.json                             # sample input data
 ├── report.json                                # output report (auto-generated)
-└── Python Assignment(Delivery System Test Cases)/
-        ├── test_case_1.json
-        ├── test_case_2.json
-        └── ... (up to test_case_10.json)
+├── test_case_1.json
+├── test_case_2.json
+└── ... (up to test_case_10.json)
 ```
 
 ---
@@ -109,7 +108,6 @@ python "Delivery System.py" "Python Assignment(Delivery System Test Cases)/test_
 
 ## Sample Output
 
-```
 loading file: base_case.json
 warehouses: 3
 agents: 3
@@ -129,4 +127,30 @@ Delivery Report:
   best agent: A3
 ----------------------------------------
 report saved to report.json
-```
+
+ASCII Route Map:
+----------------------------------------
+W . . . . . . . . . . . . . . . . . . .
+A . . . . . . . . . . . . . . . . . . .
+. * . . . . . . . . . . . . . . . . . .
+. . . . . . . . . . . . . . . . . . . .
+. . . . . . . . . . . . . . . . . . . *
+. . . . . . . . . . . . . . . . . . W .
+. . . . . . . . . . . . . . . . . A . .
+. . . . . . . . . . . . . . . . . . . .
+. . . . . * . . . . . . . . . . . . . .
+. . . . . . . . . . . . . . . . . . . .
+. . . . . . . . . . . . . . . . . . . .
+. . . . . . . . . . . . . . . . . . . .
+. . . . . . . . . . A . . . . . . . . .
+. . . . . . . . . . . . . . . . . . . .
+. . . . . . . . . . . . . . . . . . . .
+. . . . . . . . . W . . . . . . . . . .
+. . . . . . . * . . . . . . . . . . . .
+. . . . . . . . . . . . . . . . . . . .
+. . . . . . . . . . . . . . . . . . . .
+. . . . . . . . . . . . * . . . . . . .
+
+Legend:  A = Agent   W = Warehouse   * = Destination
+----------------------------------------
+top performer saved to top_performer.csv
