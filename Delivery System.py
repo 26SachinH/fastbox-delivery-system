@@ -1,6 +1,7 @@
 import json
 import math
 import sys
+import csv
 
 # load the json file
 def load_data(file):
@@ -132,6 +133,94 @@ def save_report(result, best):
     print("report saved to report.json")
 
 
+# bonus feature 1 - show a simple ascii map of all locations
+def show_ascii_map(warehouses, agents, packages):
+    print("\nASCII Route Map:")
+    print("-" * 40)
+
+    # collect all x and y values to figure out the map size
+    all_x = []
+    all_y = []
+
+    for wid in warehouses:
+        all_x.append(warehouses[wid][0])
+        all_y.append(warehouses[wid][1])
+
+    for aid in agents:
+        all_x.append(agents[aid][0])
+        all_y.append(agents[aid][1])
+
+    for pkg in packages:
+        all_x.append(pkg["destination"][0])
+        all_y.append(pkg["destination"][1])
+
+    min_x = min(all_x)
+    max_x = max(all_x)
+    min_y = min(all_y)
+    max_y = max(all_y)
+
+    # grid size 20x20
+    grid_size = 20
+
+    # make empty grid
+    grid = []
+    for i in range(grid_size):
+        row = []
+        for j in range(grid_size):
+            row.append(".")
+        grid.append(row)
+
+    # helper to convert real coords to grid coords
+    def to_grid(x, y):
+        if max_x == min_x:
+            gx = 0
+        else:
+            gx = int((x - min_x) / (max_x - min_x) * (grid_size - 1))
+
+        if max_y == min_y:
+            gy = 0
+        else:
+            gy = int((y - min_y) / (max_y - min_y) * (grid_size - 1))
+
+        return gx, gy
+
+    # place warehouses on grid
+    for wid in warehouses:
+        gx, gy = to_grid(warehouses[wid][0], warehouses[wid][1])
+        grid[gy][gx] = "W"
+
+    # place agents on grid
+    for aid in agents:
+        gx, gy = to_grid(agents[aid][0], agents[aid][1])
+        grid[gy][gx] = "A"
+
+    # place destinations on grid
+    for pkg in packages:
+        gx, gy = to_grid(pkg["destination"][0], pkg["destination"][1])
+        if grid[gy][gx] == ".":
+            grid[gy][gx] = "*"
+
+    # print the grid
+    for row in grid:
+        print(" ".join(row))
+
+    print("\nLegend:  A = Agent   W = Warehouse   * = Destination")
+    print("-" * 40)
+
+
+# bonus feature 2 - export top performer to csv
+def export_top_to_csv(result, best):
+    with open("top_performer.csv", "w", newline="") as f:
+        writer = csv.writer(f)
+        writer.writerow(["agent_id", "packages_delivered", "total_distance", "efficiency"])
+
+        # write best agent first
+        r = result[best]
+        writer.writerow([best, r["packages_delivered"], r["total_distance"], r["efficiency"]])
+
+    print("top performer saved to top_performer.csv")
+
+
 # main function
 def main():
     if len(sys.argv) > 1:
@@ -171,6 +260,10 @@ def main():
     print("-" * 40)
 
     save_report(result, best)
+
+    # bonus features
+    show_ascii_map(warehouses, agents, packages)
+    export_top_to_csv(result, best)
 
 
 main()
